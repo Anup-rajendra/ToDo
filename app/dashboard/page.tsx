@@ -1,7 +1,8 @@
 import AddTask from "@/components/Addtask";
 import TaskSection from "@/components/Tasksection";
 import SubTasks from "@/components/Subtask";
-export default function Page() {
+
+const Page = () => {
   return (
     <div>
       <div className="flex flex-col min-h-screen  pl-9 pt-9 gap-6  ">
@@ -14,4 +15,5 @@ export default function Page() {
       </div>
     </div>
   );
-}
+};
+export default Page;

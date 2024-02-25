@@ -22,25 +22,17 @@ const DialogBox: React.FC<DialogBoxProps> = ({ onClick }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            <div className="pb-2">Do you want to delete the Task?</div>
+          <DialogTitle className="pb-2">
+            Do you want to delete the Task?
           </DialogTitle>
-          <DialogDescription>
-            <div className="pb-2">
-              This action cannot be undone. This will permanently delete the
-              task.
-            </div>
+          <DialogDescription className="pb-2">
+            This action cannot be undone. This will permanently delete the task.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:justify-end ">
           <Button type="button" variant="destructive">
             Delete
           </Button>
-          <DialogClose>
-            <Button type="button" variant="default">
-              Close
-            </Button>
-          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

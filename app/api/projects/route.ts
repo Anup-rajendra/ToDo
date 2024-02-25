@@ -1,48 +1,13 @@
-// pages/dashboard/sidebar.tsx
-import React from "react";
-import DropDown from "./Dropdown";
-import UserInfo from "./Userinfo";
-import Link from "next/link";
-import { SquareUserRound } from "lucide-react";
 import { db } from "@/lib/db";
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-
-interface SideBarProps {
-  projectNames?: string[];
-  NoOfTasks?: number[];
-}
 interface Project {
   project_id: number;
   project_name: string;
   totalTasks: number;
 }
-
-const SideBar: React.FC<SideBarProps> = ({ projectNames, NoOfTasks }) => {
-  console.log("ProjectNames in SideBar:", projectNames);
-  console.log("NoOfTasks in SideBar:", NoOfTasks);
-  return (
-    <div>
-      <div className="pb-7">
-        <UserInfo />
-      </div>
-      <Link href="/dashboard/profile">
-        <div className="pl-4 flex items-center">
-          <div>
-            <SquareUserRound />
-          </div>
-          <div className="pl-2">Profile</div>
-        </div>
-      </Link>
-      <div>
-        <DropDown props={projectNames} NoOfTasks={NoOfTasks} />
-      </div>
-    </div>
-  );
-};
-
-export async function getServerSideProps() {
-  console.log("running serverside....");
+export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
   const user_id = Number(session?.user.id);
   console.log("USER_ID", user_id);
@@ -94,4 +59,3 @@ export async function getServerSideProps() {
     };
   }
 }
-export default SideBar;

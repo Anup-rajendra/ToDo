@@ -1,9 +1,3 @@
-import AddTask from "@/components/Addtask";
-import DropDown from "@/components/Dropdown";
-import SideBar from "@/components/Sidebar";
-import TaskSection from "@/components/Tasksection";
-import SubTasks from "@/components/Subtask";
-import UserInfo from "@/components/Userinfo";
 import {
   Card,
   CardContent,
@@ -12,10 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Label } from "@radix-ui/react-label";
-import { Link } from "lucide-react";
-import { Input } from "postcss";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 export default function Page() {
   return (

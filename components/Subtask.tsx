@@ -30,7 +30,7 @@ const SubTasks = () => {
   };
 
   return (
-    <>
+    <div className="flex">
       <Accordion type="single" collapsible className="w-[50%]">
         <AccordionItem value="item-1" showBorder={false}>
           <AccordionTrigger>
@@ -38,9 +38,6 @@ const SubTasks = () => {
               <div>
                 Another Section
                 <span className="text-gray-400 font-normal pl-2">4</span>
-              </div>
-              <div>
-                <Dots />
               </div>
             </div>
           </AccordionTrigger>
@@ -119,7 +116,10 @@ const SubTasks = () => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-    </>
+      <div className="block pt-5">
+        <Dots />
+      </div>
+    </div>
   );
 };
 

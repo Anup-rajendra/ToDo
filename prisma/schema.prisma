@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  firstname String
+  lastname  String
+  password  String
+  username  String   @unique
+  projects  Project[]
+}
+
+model Project {
+  project_id Int      @id @default(autoincrement())
+  project_name String   @unique 
+  user_id    Int
+  user      User      @relation(fields: [user_id], references: [id])
+  sections   Section[]
+}
+
+model Section {
+  section_id Int      @id @default(autoincrement())
+  section_name String   @unique  
+  project_id  Int      
+  project    Project  @relation(fields: [project_id], references: [project_id])
+  mainTasks  Task[]   
+}
+
+model Task {
+  task_id      Int        @id @default(autoincrement())
+  task_name    String
+  section_id   Int      
+  is_main_task Boolean   @default(false)
+  is_completed Boolean   @default(false)
+  section     Section    @relation(fields: [section_id], references: [section_id])
+
+  @@unique([section_id, is_main_task, task_name], name: "UniqueMainTaskInSection")
+  @@unique([section_id, is_main_task, task_name, task_id], name: "UniqueSubTaskInMainTask")
+}

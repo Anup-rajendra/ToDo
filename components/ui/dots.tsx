@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "./button";
 const handleDeletion = () => {
   console.log("Deleted");
 };
@@ -15,7 +16,7 @@ export const Dots = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Image src="/dots.png" alt="multiple option" width={20} height={20} />
+        <Image src="/dots.png" alt="multiple" width={20} height={20} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>Task Settings</DropdownMenuLabel>
