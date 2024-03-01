@@ -34,7 +34,6 @@ export const Ellipsis: React.FC<EllipsisProp> = ({ sectionId }) => {
               <AddTask sectionId={sectionId} display={false} />
             </div>
           </DropdownMenuItem>
-          <DropdownMenuItem>Delete Section</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
