@@ -5,7 +5,7 @@ export interface TasksData {
   task_name: number;
   is_completed: boolean;
   subtask_count: number;
-  completed_subtask_count:number;
+  completed_subtask_count: number;
 }
 
 export async function GET(req: Request) {
@@ -34,7 +34,8 @@ JOIN
     "Section" s ON t.section_id = s.section_id
 WHERE 
     t.is_main_task = true
-    AND s.section_name = ${sectionName};
+    AND s.section_name = ${sectionName}
+    ORDER BY task_id;
        `;
       console.log("mainTaskDetails", mainTaskDetails, typeof mainTaskDetails);
       return Response.json({

@@ -23,6 +23,7 @@ JOIN
 WHERE 
     a.is_main_task = false
     AND b.task_id = ${taskIdData} 
+    ORDER BY subtask_id
        `;
       console.log(
         "Main Task",
