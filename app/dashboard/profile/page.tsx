@@ -60,7 +60,7 @@ const Page = () => {
           </Link>
           <div className="mt-8">
             <DropDown
-              props={projectNames}
+              projectName={projectNames}
               NoOfTasks={noOfTasks}
               setSelectedProject={setSelectedProject}
             />
