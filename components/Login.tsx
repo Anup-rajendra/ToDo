@@ -73,7 +73,12 @@ export const LoginForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input id="password" placeholder="Password" {...field} />
+                <Input
+                  id="password"
+                  placeholder="Password"
+                  type="password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
