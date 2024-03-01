@@ -13,10 +13,7 @@ const nextConfig = {
 
     return config;
   },
-  experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: ["@prisma/client", "bcrypt"],
-  },
+
   async redirects() {
     return [
       {
