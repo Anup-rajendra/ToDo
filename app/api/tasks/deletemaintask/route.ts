@@ -5,9 +5,8 @@ export async function POST(req: Request) {
     const task_id = jsonBody.taskId;
     console.log(task_id);
     if (task_id) {
-      const deletedTask = await db.task.delete({
-        where: { task_id: task_id },
-      });
+      const deletedTask =
+        await db.$queryRaw`Delete from "Task" Where task_id=${task_id} OR parent_task_id=${task_id}`;
 
       return Response.json(deletedTask);
     } else {
