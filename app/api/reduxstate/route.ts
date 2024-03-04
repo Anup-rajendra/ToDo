@@ -1,30 +1,10 @@
-import {
-  fetchUserDetails,
-  fetchProjectDetails,
-  fetchSectionDetails,
-  fetchTaskDetails,
-} from "../../types/fetch";
+import { fetchDataDetails, } from "../../types/fetch";
+
 export async function GET(request: Request) {
   try {
-    const userDetails = await fetchUserDetails();
-    const projectDetails = await fetchProjectDetails();
-    const sectionDetails = await fetchSectionDetails();
-    const taskDetails = await fetchTaskDetails();
+    const toDo =await fetchDataDetails(); 
 
-    const initialState = {
-      todo: {
-        userDetails,
-        project: {
-          projectDetails,
-          section: {
-            sectionDetails,
-            task: {
-              taskDetails,
-            },
-          },
-        },
-      },
-    };
+    const initialState = toDo;
 
     return Response.json(initialState);
   } catch (error) {

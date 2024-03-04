@@ -1,35 +1,53 @@
-export interface RootState {
-  todo: UserDetails[];
+export interface State {
+  toDo : UserData;
+  loading: boolean;
+  error: string | null;
+  selectProject:string|null;
 }
-
-export interface UserDetails {
-  email: string;
+ export interface UserData {
+  id: number;
   username: string;
   firstname: string;
   lastname: string;
-  project: ProjectDetails[];
+  email: string;
+  projects: ProjectData[];
+}
+export interface ProjectData {
+  id: number;
+  name: string;
+  sections: SectionData[];
+  totalTasks: number;
 }
 
-export interface ProjectDetails {
-  project_id: number;
-  project_name: string;
-  total_tasks: number;
-  sections: SectionDetails[];
+export interface SectionData {
+  id: number;
+  name: string;
+  mainTasks: MainTaskData[];
+  totalSectionTasks:number;
 }
 
-export interface SectionDetails {
-  section_id: number;
-  section_name: string;
-  total_section_tasks: number;
-  task: TaskDetails[];
+export interface MainTaskData {
+  id: number;
+  name: string;
+  completed: boolean;
+  subtasks: SubtaskData[];
+  subtaskCount: number;
+  completedSubtaskCount: number;
 }
-export interface TaskDetails {
-  task_id: number;
-  task_name: string;
-  parent_task_id: number;
-  section_id: number;
-  is_main_task: boolean;
-  is_completed: boolean;
-  subtask_count: number;
-  completed_subtask_count: number;
+export interface SubtaskData {
+  id: number;
+  name: string;
+  completed: boolean;
 }
+
+ export interface TotalTaskType {
+   project_id:number;
+   total_tasks: number;
+   total_section_tasks:number;
+ }
+ export interface SectionTaskType {
+   section_id: number;
+   section_task_count: number;
+ }
+
+ 

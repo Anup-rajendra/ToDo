@@ -50,9 +50,14 @@ export default function Page() {
   });
 
   const onSubmit = async (value: z.infer<typeof FormSchema>) => {
-    if (session?.user.email === value.email) {
-      router.push("/password/reset");
-      session.user.email = value.email;
+    
+      const result=await fetch("/api/passwordreset",{
+        method:"POST",
+      body:JSON.stringify(value),
+    })
+    if(result.ok){
+        console.log("Made Succesfull request")
+        router.push("/password/reset");
     } else {
       toast("Request Failed", {
         description: "The Entered E-mail does not exist",

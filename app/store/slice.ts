@@ -1,62 +1,68 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  RootState,
-  UserDetails,
-  ProjectDetails,
-  SectionDetails,
-  TaskDetails,
+  State,
+  SubtaskData,
+  MainTaskData,
+  SectionData,
+  ProjectData,
+  UserData,
+  TotalTaskType,
+  SectionTaskType,
 } from "./types";
 
-export const initialState: RootState = {
-  todo: [],
+import { RootState } from "./store";
+
+export const initialState: State = {
+  toDo: { id: 0, // or any default value
+    username: "",
+    firstname: "",
+    lastname: "",
+    email: "",
+    projects: []},
+  loading: false,
+  error: null,
+  selectProject:null,
 };
+
+export const fetchAllData = createAsyncThunk("users/fetch", async () => {
+  const response = await fetch("http://localhost:3000/api/reduxstate");
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  const data = await response.json();
+  return data;
+});
 
 const toDoSlice = createSlice({
   name: "toDo",
   initialState,
   reducers: {
-    addSubTaskDetails(
-      state,
-      action: PayloadAction<{
-        subTaskId: number;
-        sectionId: number;
-        subTaskName: string;
-        parentTaskId: number;
-      }>
-    ) {
-      const { subTaskId, sectionId, subTaskName, parentTaskId } =
-        action.payload;
-      const toDo = state.todo;
-      const updatedToDo = toDo.map((user) => ({
-        ...user,
-        project: user.project.map((project) => ({
-          ...project,
-          sections: project.sections.map((section) => ({
-            ...section,
-            task: section.task.map((task) => {
-              // Check if the current task has the specified subTaskId
-              if (task.task_id === subTaskId) {
-                return {
-                  ...task,
-                  task_id: subTaskId,
-                  task_name: subTaskName,
-                  section_id: sectionId,
-                  is_completed: false,
-                  is_main_task: false,
-                  parent_task_id: parentTaskId,
-                };
-              }
-              return task; // If not the task we want to update, return unchanged
-            }),
-          })),
-        })),
-      }));
+    setSelectProject: (state, action: PayloadAction<string| null>) => {
+      state.selectProject = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAllData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.toDo = action.payload;
+      })
+      .addCase(fetchAllData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Something went wrong";
+      });
   },
 });
 
-export const { addSubTaskDetails } = toDoSlice.actions;
+ 
 
-export const selectChatState = (state: RootState) => state.todo;
-
+export const selectTodo = (state: RootState) => state.toDo;
+export const selectLoading = (state: RootState) => state.loading;
+export const selectError = (state: RootState) => state.error;
+export const selectSelectProject = (state: RootState) => state.selectProject;
+export const {setSelectProject}=toDoSlice.actions;
 export default toDoSlice.reducer;
