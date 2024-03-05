@@ -16,8 +16,17 @@ export interface SectionProps {
     total_section_tasks: number;
   }[];
 }
+import {
+  fetchAllData,
+  selectError,
+  selectLoading,
+  selectTodo,
+  selectSelectProject,
+  setSelectProject,
+} from "@/app/store/slice";
+import { useProjectName, useTotalTaskName } from "@/components/util";
 const Section: React.FC<SectionProps> = ({ sections }) => {
-  useEffect(() => {}, [sections]);
+
   return (
     <div className="flex flex-col">
       {sections.map((section, index) => (

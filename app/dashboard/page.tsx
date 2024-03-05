@@ -5,65 +5,63 @@ import DropDown from "@/components/Dropdown";
 import UserInfo from "@/components/Userinfo";
 import Link from "next/link";
 import { SquareUserRound } from "lucide-react";
-import { store } from "../store/store";
+import { store, useAppDispatch, useTypedSelector } from "../store/store";
 import { Provider } from "react-redux";
+import {
+  fetchAllData,
+  selectError,
+  selectLoading,
+  selectTodo,
+  selectSelectProject,
+  setSelectProject,
+} from "../store/slice";
+import { useProjectName, useTotalTaskName } from "@/components/util";
+ 
 const Page = () => {
-  const [projectNames, setProjectNames] = useState<string[]>([]);
-  const [noOfTasks, setNoOfTasks] = useState<number[]>([]);
-  const [selectedProject, setSelectedProject] = useState<string | null>(null);
 
-
+  const dispatch = useAppDispatch();
+  const todo = useTypedSelector(selectTodo);
+  const isLoading = useTypedSelector(selectLoading);
+  const error = useTypedSelector(selectError);
+  const selectProject = useTypedSelector(selectSelectProject);
+  const projectNames = useProjectName();
+  const totalTasks = useTotalTaskName();
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/projects", {
-          method: "GET",
-        });
-        const projects = await response.json();
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        setProjectNames(projects.projectNames);
-        setNoOfTasks(projects.noOfTasks);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
-    };
-
-    fetchData();
+    dispatch(fetchAllData());
+    dispatch(setSelectProject(projectNames[0]));
+    console.log(todo, isLoading, error);
   }, []);
 
   return (
-    <Provider store={store}>
-      <div className="flex flex-row">
-        <div className="flex w-1/4 flex-col gap-2 bg-primary-foreground min-h-screen">
-          <div>
-            <div className="pb-7">
-              <UserInfo />
-            </div>
-            <Link href="/dashboard/profile">
-              <div className="pl-4 flex items-center">
-                <div>
-                  <SquareUserRound />
-                </div>
-                <div className="pl-2">Profile</div>
+    <>
+      {isLoading && <div>Loading...</div>}
+      {error && <div>Error: {error}</div>}
+      {!isLoading && !error && (
+        <div className="flex flex-row">
+          <div className="flex w-1/4 flex-col gap-2 bg-primary-foreground min-h-screen">
+            <div>
+              <div className="pb-7">
+                <UserInfo />
               </div>
-            </Link>
-            <div className="mt-8">
-              <DropDown
-                projectName={projectNames}
-                NoOfTasks={noOfTasks}
-                setSelectedProject={setSelectedProject}
-              />
+              <Link href="/dashboard/profile">
+                <div className="pl-4 flex items-center">
+                  <div>
+                    <SquareUserRound />
+                  </div>
+                  <div className="pl-2">Profile</div>
+                </div>
+              </Link>
+              <div className="mt-8">
+                <DropDown projectName={projectNames} NoOfTasks={totalTasks} />
+              </div>
             </div>
           </div>
+          <div className="flex w-full">
+            <BodyContent />
+          </div>
         </div>
-        <div className="flex w-full">
-          <BodyContent selectedProject={selectedProject} />
-        </div>
-      </div>
-    </Provider>
+      )}
+    </>
   );
 };
 

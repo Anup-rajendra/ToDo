@@ -8,36 +8,35 @@ import {
 } from "@/components/ui/accordion";
 import { YellowCircle, GreyCircle } from "./ui/circles";
 import Link from "next/link";
-
+import { store, useAppDispatch, useTypedSelector } from "@/app/store/store";
 interface DropDownprojectName {
   projectName: string[];
   NoOfTasks: number[];
-  setSelectedProject: React.Dispatch<React.SetStateAction<string | null>>;
 }
-
+import {
+  selectError,
+  selectLoading,
+  selectTodo,
+  selectSelectProject,
+  setSelectProject,
+} from "@/app/store/slice";
+import { ProjectData } from "@/app/store/types";
 const DropDown: React.FC<DropDownprojectName> = ({
   projectName,
   NoOfTasks,
-  setSelectedProject,
 }) => {
   const [selectedIdx, setSelectedIdx] = useState<number>(0);
-  const [noProject, setNoProject] = useState(false);
-
-  useEffect(() => {
-    if (projectName) {
-      setNoProject(true);
+   const dispatch = useAppDispatch();
+   const selectProject = useTypedSelector(selectSelectProject);
+   useEffect(()=>{
+    if (projectName.length && !selectedIdx) {
+      dispatch(setSelectProject(projectName[0]));
     }
-    setSelectedProject(projectName[0]);
-  }, [projectName, setSelectedProject]);
-
-  const handleOnClick = useCallback(
-    (index: number) => {
+   },[])  
+  const handleOnClick = (index: number) => {
       setSelectedIdx(index);
-      setSelectedProject(projectName[index]);
-    },
-    [projectName, setSelectedProject]
-  );
-
+      dispatch(setSelectProject(projectName[index]));
+    }
   return (
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value="item-1" showBorder={false}>
@@ -45,7 +44,7 @@ const DropDown: React.FC<DropDownprojectName> = ({
           <AccordionTrigger>Project</AccordionTrigger>
         </Link>
         <AccordionContent>
-          {noProject ? (
+          {projectName ? (
             Array.isArray(projectName) &&
             projectName.map((content, index) => (
               <div key={content} onClick={() => handleOnClick(index)}>

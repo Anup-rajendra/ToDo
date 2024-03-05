@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addSubTaskDetails } from "../app/store/slice";
+// import { addSubTaskDetails } from "../app/store/slice";
 import {
   Dialog,
   DialogContent,
@@ -47,14 +47,14 @@ const AddSubTask: React.FC<AddMaintaskProps> = ({ maintaskId, sectionId }) => {
     },
   });
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    dispatch(
-      addSubTaskDetails({
-        sectionId: sectionId,
-        subTaskId: uniqueRandomId,
-        subTaskName: data.subtaskname,
-        parentTaskId: maintaskId,
-      })
-    );
+    // dispatch(
+    //   addSubTaskDetails({
+    //     sectionId: sectionId,
+    //     subTaskId: uniqueRandomId,
+    //     subTaskName: data.subtaskname,
+    //     parentTaskId: maintaskId,
+    //   })
+    // );
     try {
       const encodedValue = encodeURIComponent(maintaskId);
       console.log(data);
