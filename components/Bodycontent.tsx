@@ -12,18 +12,14 @@ import {
   setSelectProject,
 } from "@/app/store/slice";
 import { store, useAppDispatch, useTypedSelector } from "@/app/store/store";
-import { useProjectName, useSectionName, } from "./util";
-
-
+import { useProjectName, useSectionName } from "./util";
 const BodyContent = () => {
-  const [section, setsections] = useState<SectionProps["sections"]>([]);
-   const selectProject = useTypedSelector(selectSelectProject);
-  
+  const selectProject= useTypedSelector(selectSelectProject);
   return (
     <div className="w-[100%]">
       <div className="flex flex-col min-h-screen pl-9 pt-9 gap-6">
         <p className="font-bold text-2xl pl-7">{selectProject}</p>
-        <Section sections={useSectionName(selectProject)} />
+        <Section sections={useSectionName()} />
       </div>
     </div>
   );

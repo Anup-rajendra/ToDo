@@ -1,8 +1,10 @@
+import { TasksData } from "../api/maintask/route";
+
 export interface State {
   toDo : UserData;
   loading: boolean;
   error: string | null;
-  selectProject:string|null;
+  selectProject:string;
 }
  export interface UserData {
   id: number;
@@ -23,6 +25,11 @@ export interface SectionData {
   id: number;
   name: string;
   mainTasks: MainTaskData[];
+  totalSectionTasks:number;
+}
+export interface SectionPartialData{
+  id:number;
+  name:string;
   totalSectionTasks:number;
 }
 

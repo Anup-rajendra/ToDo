@@ -1,8 +1,8 @@
 import { db } from "@/lib/db";
 
 export interface TasksData {
-  task_id: string;
-  task_name: number;
+  task_id: number;
+  task_name: string;
   is_completed: boolean;
   subtask_count: number;
   completed_subtask_count: number;

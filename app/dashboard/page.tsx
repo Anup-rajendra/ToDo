@@ -12,7 +12,7 @@ import {
   selectError,
   selectLoading,
   selectTodo,
-    selectSelectProject,
+  selectSelectProject,
   setSelectProject,
 } from "../store/slice";
 import { useProjectName, useTotalTaskName } from "@/components/util";
@@ -28,6 +28,7 @@ const Page = () => {
   const totalTasks = useTotalTaskName();
   useEffect(() => {
     dispatch(fetchAllData());
+    dispatch(setSelectProject(projectNames[0]));
     console.log(todo, isLoading, error);
   }, []);
 

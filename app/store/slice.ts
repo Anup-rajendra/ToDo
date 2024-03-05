@@ -11,6 +11,7 @@ import {
 } from "./types";
 
 import { RootState } from "./store";
+import { TasksData } from "../api/maintask/route";
 
 export const initialState: State = {
   toDo: { id: 0, // or any default value
@@ -21,7 +22,7 @@ export const initialState: State = {
     projects: []},
   loading: false,
   error: null,
-  selectProject:null,
+  selectProject:"",
 };
 
 export const fetchAllData = createAsyncThunk("users/fetch", async () => {
@@ -37,7 +38,7 @@ const toDoSlice = createSlice({
   name: "toDo",
   initialState,
   reducers: {
-    setSelectProject: (state, action: PayloadAction<string| null>) => {
+    setSelectProject: (state, action: PayloadAction<string>) => {
       state.selectProject = action.payload;
     },
   },
