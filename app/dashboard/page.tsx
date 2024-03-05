@@ -7,28 +7,13 @@ import Link from "next/link";
 import { SquareUserRound } from "lucide-react";
 import { store } from "../store/store";
 import { Provider } from "react-redux";
-import axios from "axios";
-
 const Page = () => {
   const [projectNames, setProjectNames] = useState<string[]>([]);
   const [noOfTasks, setNoOfTasks] = useState<number[]>([]);
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
-  const fetchInitialState = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/api/reduxstate");
-      if (response.status < 200 || response.status >= 300) {
-        console.error(`HTTP error! Status: ${response.status}`);
-        throw new Error("Failed to fetch API");
-      }
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching initial state:", error);
-      throw error;
-    }
-  };
+
 
   useEffect(() => {
-    fetchInitialState()
     const fetchData = async () => {
       try {
         const response = await fetch("/api/projects", {

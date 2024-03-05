@@ -39,11 +39,12 @@ const SubTasks: React.FC<SubTasksProps> = ({ sectionId, mainTaskId }) => {
     try {
       const encodedValue = encodeURIComponent(subtaskId);
       if (encodedValue) {
-        const response = await fetch(`/api/complete`, {
+        const response = await fetch(`/api/subTaskComplete`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             "Encoded-Value": encodedValue,
+            "Main-task":mainTaskId,
           },
           body: JSON.stringify({
             is_completed: isCompleted,
