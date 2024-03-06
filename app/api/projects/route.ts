@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 interface Project {
-  project_id: number;
+  project_id: string;
   project_name: string;
   total_tasks: number;
 }

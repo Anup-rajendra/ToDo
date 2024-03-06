@@ -26,20 +26,24 @@ import {
 } from "@/components/ui/form";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { RedCrossTwo } from "./ui/redcrosstwo";
+import { v4 as uuidv4 } from "uuid";
+import { setSelectSection, setMainTasks,setSelectSubTaskMainId, setSubTasks } from "@/app/store/slice";
+import { useAppDispatch } from "@/app/store/store";
+import { SectionData, SubtaskData } from "@/app/store/types";
 
 interface AddMaintaskProps {
-  maintaskId: number;
-  sectionId: number;
+  maintaskId: string;
+  sectionId:string;
 }
 const FormSchema = z.object({
   subtaskname: z.string().min(1, { message: "Task name is required" }).max(500),
 });
 const AddSubTask: React.FC<AddMaintaskProps> = ({ maintaskId, sectionId }) => {
-  const dispatch = useDispatch();
-  const generateUniqueRandomNumber = (): number => {
-    return Math.floor(Math.random() * Date.now());
-  };
-  const uniqueRandomId = generateUniqueRandomNumber();
+  const dispatch=useAppDispatch();
+  useEffect(()=>{
+
+  },[])
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -47,15 +51,14 @@ const AddSubTask: React.FC<AddMaintaskProps> = ({ maintaskId, sectionId }) => {
     },
   });
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    // dispatch(
-    //   addSubTaskDetails({
-    //     sectionId: sectionId,
-    //     subTaskId: uniqueRandomId,
-    //     subTaskName: data.subtaskname,
-    //     parentTaskId: maintaskId,
-    //   })
-    // );
     try {
+      const subTaskId:string=uuidv4();
+       const subTaskDetail:SubtaskData={
+        id:subTaskId,
+        name:data.subtaskname,
+        completed:false,
+      }
+      dispatch(setSubTasks(subTaskDetail));
       const encodedValue = encodeURIComponent(maintaskId);
       console.log(data);
       const encodedSectionValue = encodeURIComponent(sectionId);
@@ -65,10 +68,10 @@ const AddSubTask: React.FC<AddMaintaskProps> = ({ maintaskId, sectionId }) => {
           "Content-Type": "application/json",
           "maintask-id": encodedValue,
           "section-id": encodedSectionValue,
+          "subtask-id":subTaskId,
         },
         body: JSON.stringify({ data }),
       });
-
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -126,3 +129,7 @@ const AddSubTask: React.FC<AddMaintaskProps> = ({ maintaskId, sectionId }) => {
   );
 };
 export default AddSubTask;
+function setSubtasks(subTaskDetail: SubtaskData): any {
+  throw new Error("Function not implemented.");
+}
+

@@ -5,29 +5,34 @@ import DialogBox from "./Deletedialogbox";
 import AddSubTask from "./AddSubTask";
 import { useSubTaskDetails } from "./util";
 import { SubtaskData } from "@/app/store/types";
+import { v4 as uuidv4 } from "uuid";
+import { selectTodo, setSelectSection, setSelectSubTaskMainId } from "@/app/store/slice";
+import { useAppDispatch, useTypedSelector } from "@/app/store/store";
 
 interface SubTasksProps {
-  sectionId: number;
+  sectionId: string;
   mainTaskId: string;
 }
 
 const SubTasks: React.FC<SubTasksProps> = ({ sectionId, mainTaskId }) => {
-  const mainId = Number(mainTaskId);
+  const mainId =  mainTaskId;
   const subTaskDetails:SubtaskData[]=useSubTaskDetails(sectionId,mainTaskId)
   const [noOfSubTasks, setNoOfSubTasks] = useState<SubtaskData[]>(subTaskDetails);
   const [hoveredSubtaskId, setHoveredSubtaskId] = useState<string | null>(null);
+  const todo = useTypedSelector(selectTodo);
+  const dispatch=useAppDispatch();
   const handleCheckboxChange = (subtaskId: string) => {
     console.log("Handling checkbox");
     console.log(noOfSubTasks);
     setNoOfSubTasks((prevTasks) =>
       prevTasks.map((subtask) =>
-        subtask.id=== Number(subtaskId)
+        subtask.id=== subtaskId
           ? { ...subtask, completed: !subtask.completed }
           : subtask
       )
     );
     const updatedTask = noOfSubTasks.find(
-      (task) => task.id=== Number(subtaskId)
+      (task) => task.id===subtaskId
     );
     console.log(updatedTask);
     if (updatedTask) {
@@ -71,6 +76,13 @@ const SubTasks: React.FC<SubTasksProps> = ({ sectionId, mainTaskId }) => {
   const handleMouseLeave = () => {
     setHoveredSubtaskId(null);
   };
+   const handleSectionMain= (sectionId: string,mainId:string) => {
+     dispatch(setSelectSection(sectionId));
+     dispatch(setSelectSubTaskMainId(mainId));
+   };
+  useEffect(()=>{
+    setNoOfSubTasks(subTaskDetails);
+  },[todo])
 
   return (
     <>
@@ -106,7 +118,10 @@ const SubTasks: React.FC<SubTasksProps> = ({ sectionId, mainTaskId }) => {
               </div>
             </div>
           ))}
-          <div className="pl-6 -mt-2">
+          <div
+            className="pl-6 -mt-2"
+            onMouseOver={() => handleSectionMain(sectionId,mainId)}
+          >
             <AddSubTask maintaskId={mainId} sectionId={sectionId} />
           </div>
         </>

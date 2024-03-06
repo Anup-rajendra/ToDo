@@ -10,6 +10,7 @@ import {
   selectTodo,
   selectSelectProject,
   setSelectProject,
+  setSelectSection,
 } from "@/app/store/slice";
 import { store, useAppDispatch, useTypedSelector } from "@/app/store/store";
 import { useMainTaskDetails, useProjectName, useSectionName } from "./util";
@@ -17,19 +18,23 @@ import { useMainTaskDetails, useProjectName, useSectionName } from "./util";
 
 interface MainTasksProp {
   sectionName: string;
-  sectionId: number;
+  sectionId: string;
 }
 
 const MainTasks: React.FC<MainTasksProp> = ({ sectionId, sectionName }) => {
   const [hoveredTaskId, setHoveredTaskId] = useState<string | null>(null);
-  const mainTaskDetails = useMainTaskDetails(sectionName);
+   const mainTaskDetails = useMainTaskDetails(sectionName);
+   const todo = useTypedSelector(selectTodo);
   const [mainTasks,setMainTasks]=useState<TasksData[]>(mainTaskDetails)
-
+ useEffect(()=>{
+    setMainTasks(mainTaskDetails);
+ },[todo])
+  
   
   const handleCheckboxChange = (taskId: string) => {
       setMainTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task.task_id === Number(taskId)
+          task.task_id ===  taskId
             ? { ...task, is_completed: !task.is_completed }
             : task
         )
@@ -37,7 +42,7 @@ const MainTasks: React.FC<MainTasksProp> = ({ sectionId, sectionName }) => {
     );
     
         const updatedTask = mainTasks.find(
-          (task) => task.task_id === Number(taskId)
+          (task) => task.task_id === taskId 
         );
 
         if (updatedTask) {

@@ -8,36 +8,39 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id  
   email     String   @unique
   firstname String
   lastname  String
   password  String
   username  String   @unique
+  created_at     DateTime  @default(now())
   projects  Project[]
 }
 
 model Project {
-  project_id Int      @id @default(autoincrement())
+  project_id String   @id 
   project_name String   @unique 
-  user_id    Int
+  user_id    String
+  created_at     DateTime  @default(now())
   user      User      @relation(fields: [user_id], references: [id])
   sections   Section[]
 }
 
 model Section {
-  section_id Int      @id @default(autoincrement())
+  section_id String   @id  
   section_name String   @unique  
-  project_id  Int      
+  project_id  String
+  created_at     DateTime  @default(now())
   project    Project  @relation(fields: [project_id], references: [project_id])
   mainTasks  Task[]   
 }
 
 model Task {
-  task_id        Int       @id @default(autoincrement())
+  task_id        String   @id  
   task_name      String
-  parent_task_id Int?      
-  section_id     Int      
+  parent_task_id String?      
+  section_id     String      
   is_main_task   Boolean   @default(false)
   is_completed   Boolean   @default(false)
   created_at     DateTime  @default(now())   
@@ -45,8 +48,3 @@ model Task {
 
   @@unique([section_id, is_main_task, parent_task_id, task_name], name: "UniqueTaskInSection")
 }
-
-
-
-
- 

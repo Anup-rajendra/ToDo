@@ -3,7 +3,7 @@ export async function PATCH(request: Request) {
   try {
     const data = request.headers.get("Encoded-value");
     if (data) {
-      const taskId = Number(decodeURIComponent(data));
+      const taskId = decodeURIComponent(data);
       const body = await request.json();
       const { is_completed } = body;
       console.log(is_completed, taskId);

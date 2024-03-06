@@ -1,40 +1,48 @@
 import { TasksData } from "../api/maintask/route";
 
 export interface State {
-  toDo : UserData;
+  toDo: UserData;
   loading: boolean;
   error: string | null;
-  selectProject:string;
+  selectProject: string;
+  selectSection: string;
+  selectSubTaskMainId: string;
 }
  export interface UserData {
-  id: number;
+  id: string;
   username: string;
   firstname: string;
   lastname: string;
   email: string;
   projects: ProjectData[];
 }
+ export interface UserDataPartial {
+  username: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+}
 export interface ProjectData {
-  id: number;
+  id: string;
   name: string;
   sections: SectionData[];
   totalTasks: number;
 }
 
 export interface SectionData {
-  id: number;
+  id: string;
   name: string;
   mainTasks: MainTaskData[];
   totalSectionTasks:number;
 }
 export interface SectionPartialData{
-  id:number;
+  id:string;
   name:string;
   totalSectionTasks:number;
 }
 
 export interface MainTaskData {
-  id: number;
+  id: string;
   name: string;
   completed: boolean;
   subtasks: SubtaskData[];
@@ -42,18 +50,26 @@ export interface MainTaskData {
   completedSubtaskCount: number;
 }
 export interface SubtaskData {
-  id: number;
+  id: string;
   name: string;
   completed: boolean;
 }
+export interface AddTaskDetails{
+  mainTaskId:string;
+  mainName:string;
+  mainCompleted:boolean;
+  subTaskId:string;
+  subtaskName:string;
+  subCompleted?:boolean;
+}
 
  export interface TotalTaskType {
-   project_id:number;
+   project_id:string;
    total_tasks: number;
    total_section_tasks:number;
  }
  export interface SectionTaskType {
-   section_id: number;
+   section_id: string;
    section_task_count: number;
  }
 

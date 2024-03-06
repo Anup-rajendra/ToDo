@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 
 interface Tasks {
-  section_id: number;
+  section_id: string;
   section_name: string;
   total_section_tasks: number;
 }

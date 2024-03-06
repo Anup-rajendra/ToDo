@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { createHash } from "crypto";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 const userSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }).max(100),
   firstname: z
@@ -32,6 +33,7 @@ const userSchema = z.object({
 });
 export async function POST(req: Request) {
   try {
+    const id: string = uuidv4();
     const body = await req.json();
     const { username, firstname, lastname, email, password } =
       userSchema.parse(body);
@@ -57,6 +59,7 @@ export async function POST(req: Request) {
     const hashpassword = createHash("sha256").update(password).digest("hex");
     const newUser = await db.user.create({
       data: {
+        id,
         username,
         firstname,
         lastname,

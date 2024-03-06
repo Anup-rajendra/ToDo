@@ -15,7 +15,7 @@ import {
 
 export const fetchDataDetails = async (): Promise<UserData | null> => {
   const session = await getServerSession(authOptions);
-  const user_id = Number(session?.user.id);
+  const user_id =  session?.user.id;
 
   const dataDetails: any[] = await db.$queryRaw`
     SELECT
@@ -51,10 +51,10 @@ export const fetchDataDetails = async (): Promise<UserData | null> => {
     LEFT JOIN "Task" st ON st.parent_task_id = t.task_id
     WHERE u.id = ${user_id}
       ORDER BY
-    p.project_id,
-    s.section_id,
-    t.task_id,
-    st.task_id 
+    p.created_at,
+    s.created_at,
+    t.created_at,
+    st.created_at
   `;
 
     const totalTask: TotalTaskType[] = await db.$queryRaw`

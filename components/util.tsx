@@ -12,13 +12,22 @@ export const useTotalTaskName = () => {
   const todo = useTypedSelector(selectTodo);
   return todo.projects.map((project) => project.totalTasks);
 };
+export const useUserDetails = () => {
+  const todo = useTypedSelector(selectTodo);
+  return {
+    username:todo.username,
+    firstname:todo.firstname,
+    lastname:todo.lastname,
+    email:todo.email,
+  }
+};
 
 export const useSectionName = () => {
   const todo = useTypedSelector(selectTodo);
   const projectName=useTypedSelector(selectSelectProject)
 
   if (!projectName) {
-    console.log("Project name is null or undefined.");
+   
     return [];
   }
 
@@ -30,7 +39,7 @@ const sections = todo.projects
     section_name: section.name,
     total_section_tasks: section.totalSectionTasks,
   }));
-  console.log(sections);
+ 
   return sections;
 };
 export const useMainTaskDetails = (sectionName: string | null) => {
@@ -63,10 +72,10 @@ export const useMainTaskDetails = (sectionName: string | null) => {
    return transformedMainTasks;
 
 };
-export const useSubTaskDetails = (sectionId:number,mainTaskIden:string) => {
+export const useSubTaskDetails = (sectionId:string,mainTaskIden:string) => {
   const projectName = useTypedSelector(selectSelectProject);
   const todo: UserData = useTypedSelector(selectTodo);
-  const mainTaskId=Number(mainTaskIden);
+  const mainTaskId=mainTaskIden;
   if (!sectionId || !projectName) {
     return [];
   }
@@ -84,7 +93,7 @@ export const useSubTaskDetails = (sectionId:number,mainTaskIden:string) => {
   }
    
   const mainTasks:MainTaskData[]= section.mainTasks;
-  const mainTask:MainTaskData|undefined=mainTasks.find((m)=>m.id===Number(mainTaskId))
+  const mainTask:MainTaskData|undefined=mainTasks.find((m)=>m.id===mainTaskId)
   if(!mainTask){
     return [];
   }

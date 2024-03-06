@@ -8,8 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -25,9 +25,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { v4 as uuidv4 } from "uuid";
+import { setSelectSection, setMainTasks } from "@/app/store/slice";
+import { useAppDispatch } from "@/app/store/store";
+import MainTasks from "./Maintasks";
+import { AddTaskDetails, MainTaskData } from "@/app/store/types";
 
 interface AddtaskProps {
-  sectionId: number;
+  sectionId: string;
   display: boolean;
 }
 
@@ -41,11 +46,44 @@ const FormSchema = z.object({
 });
 
 const AddTask: React.FC<AddtaskProps> = ({ sectionId, display }) => {
+  const dispatch = useAppDispatch();
+  useEffect(()=>{
+ 
+  },[])
+    
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {  
+    const taskid:string=uuidv4();
+    const subtaskid:string=uuidv4();
+    if(data.subtaskname){
+    const mainDetails:AddTaskDetails={
+      mainTaskId:taskid,
+      mainName:data.taskname,
+      mainCompleted:false,
+      subTaskId:subtaskid,
+      subtaskName:data.subtaskname,
+      subCompleted:false,
+      
+    }
+  
+    dispatch(setMainTasks(mainDetails));
+  }
+    else{
+       const mainDetails: AddTaskDetails = {
+         mainTaskId: taskid,
+         mainName: data.taskname,
+         mainCompleted: false,
+         subTaskId: subtaskid,
+         subtaskName: "",
+         subCompleted:false,
+       };
+    
+       dispatch(setMainTasks(mainDetails));
+    }
+    
     try {
       const encodedValue = encodeURIComponent(sectionId);
       const response = await fetch("/api/tasks/addmaintask", {
@@ -53,6 +91,8 @@ const AddTask: React.FC<AddtaskProps> = ({ sectionId, display }) => {
         headers: {
           "Content-Type": "application/json",
           "Encoded-Value": encodedValue,
+          "Main-Task":taskid,
+          "Sub-Task":subtaskid
         },
         body: JSON.stringify({ data }),
       });
@@ -66,7 +106,7 @@ const AddTask: React.FC<AddtaskProps> = ({ sectionId, display }) => {
       console.error("Error adding task:", error);
     }
   };
-
+ 
   return (
     <Dialog>
       <DialogTrigger>
@@ -103,7 +143,8 @@ const AddTask: React.FC<AddtaskProps> = ({ sectionId, display }) => {
                     <Input
                       id="taskname"
                       placeholder="Enter Task"
-                      {...field}
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(e.target.value)}
                       required={true}
                     />
                   </FormControl>
@@ -122,15 +163,18 @@ const AddTask: React.FC<AddtaskProps> = ({ sectionId, display }) => {
                     <Input
                       id="subtaskname"
                       placeholder="Enter Initial SubTask(Optional)"
-                      {...field}
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>
                 )}
               />
             </FormItem>
             <DialogFooter>
-              <Button type="submit">Save</Button>
-              <DialogClose>
+              <DialogClose asChild>
+                <Button type="submit">Save</Button>
+              </DialogClose>
+              <DialogClose asChild>
                 <Button type="button" variant="destructive">
                   Close
                 </Button>

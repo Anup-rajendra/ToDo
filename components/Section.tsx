@@ -11,7 +11,7 @@ import { Ellipsis } from "./Ellipsis";
 import MainTasks from "./Maintasks";
 export interface SectionProps {
   sections: {
-    section_id: number;
+    section_id: string;
     section_name: string;
     total_section_tasks: number;
   }[];
@@ -23,10 +23,15 @@ import {
   selectTodo,
   selectSelectProject,
   setSelectProject,
+  setSelectSection,
 } from "@/app/store/slice";
 import { useProjectName, useTotalTaskName } from "@/components/util";
+import { store, useAppDispatch, useTypedSelector } from "@/app/store/store";
 const Section: React.FC<SectionProps> = ({ sections }) => {
-
+  const dispatch=useAppDispatch();
+  const handleSection=(sectionId:string)=>{
+    dispatch(setSelectSection(sectionId));
+  }
   return (
     <div className="flex flex-col">
       {sections.map((section, index) => (
@@ -44,7 +49,10 @@ const Section: React.FC<SectionProps> = ({ sections }) => {
                 </div>
               </AccordionTrigger>
               <AccordionContent className="pl-3">
-                <div className="pt-2">
+                <div
+                  className="pt-2"
+                  onMouseOver={() => handleSection(section.section_id)}
+                >
                   <AddTask sectionId={section.section_id} display={true} />
                 </div>
                 <MainTasks

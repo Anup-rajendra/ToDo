@@ -27,9 +27,7 @@ const Page = () => {
   const projectNames = useProjectName();
   const totalTasks = useTotalTaskName();
   useEffect(() => {
-    dispatch(fetchAllData());
     dispatch(setSelectProject(projectNames[0]));
-    console.log(todo, isLoading, error);
   }, []);
 
   return (

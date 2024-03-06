@@ -5,10 +5,11 @@ interface SubTaskCount{
 export async function PATCH(request: Request) {
   try {
     const data = request.headers.get("Encoded-value");
-    const mainTaskId = Number(request.headers.get("Main-Task"));
-  
+    
+    const mainTaskId = request.headers.get("Main-Task");
+    if(mainTaskId){
     if (data) {
-      const taskId = Number(decodeURIComponent(data));
+      const taskId = decodeURIComponent(data);
       const body = await request.json();
       const { completed } = body;
       console.log( completed, taskId);
@@ -40,6 +41,7 @@ export async function PATCH(request: Request) {
        
       return Response.json(updatedTask);
     }
+  }
   } catch (error) {
     console.error("Error updating resource:", error);
     return Response.json({ message: "Internal server error" });

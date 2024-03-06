@@ -17,7 +17,7 @@ const handleDeletion = (
   console.log("Deleted");
 };
 interface EllipsisProp {
-  sectionId: number;
+  sectionId: string;
 }
 export const Ellipsis: React.FC<EllipsisProp> = ({ sectionId }) => {
   return (
