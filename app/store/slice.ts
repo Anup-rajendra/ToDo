@@ -5,13 +5,8 @@ import {
   MainTaskData,
   SectionData,
   ProjectData,
-  UserData,
-  TotalTaskType,
-  SectionTaskType,
 } from "./types";
-
 import { RootState } from "./store";
-import { TasksData } from "../api/maintask/route";
 import { AddTaskDetails } from "./types";
 export const initialState: State = {
   toDo: { id: "", // or any default value
@@ -53,8 +48,90 @@ const toDoSlice = createSlice({
     setSelectTaskId: (state, action: PayloadAction<string>) => {
       state.selectTaskId = action.payload;
     },
+    setCompletedMainTask: (state, action: PayloadAction<string>) => {
+      const mainTaskId = action.payload;
+      const updatedProject = state.toDo.projects.map((project) => {
+        if (project.name === state.selectProject) {
+          const updatedSection = project.sections.map((section) => {
+            if (section.id === state.selectSection) {
+              const updatedMainTask = section.mainTasks.map((main) => {
+                if (main.id === mainTaskId) {
+                  main.completed = !main.completed;
+                  if (main.completed === true) {
+                    main.completedSubtaskCount = main.subtaskCount;
+                    const updatedSubtask = main.subtasks.map((sub) => {
+                      sub.completed = true;
+                      return sub;
+                    });
+                    return { ...main, subtasks: updatedSubtask };
+                  } else {
+                    main.completedSubtaskCount = 0;
+                    const updatedSubtask = main.subtasks.map((sub) => {
+                      sub.completed = false;
+                      return sub;
+                    });
+                    return { ...main, subtasks: updatedSubtask };
+                  }
+                }
+                return main;
+              });
+              return { ...section, mainTasks: updatedMainTask };
+            }
+            return section;
+          });
+          return { ...project, sections: updatedSection };
+        }
+        return project;
+      });
+      state.toDo = {
+        ...state.toDo,
+        projects: updatedProject,
+      };
+      console.log(state.toDo);
+    },
+    setCompletedSubTask: (state, action: PayloadAction<{mainTaskId:string,subTaskId:string}>) => {
+      const { mainTaskId, subTaskId } = action.payload;
+      const updatedProject = state.toDo.projects.map((project) => {
+        if (project.name === state.selectProject) {
+          const updatedSection = project.sections.map((section) => {
+            if (section.id === state.selectSection) {
+              const updatedMainTask = section.mainTasks.map((main) => {
+                if (main.id === mainTaskId) {
+                  const updatedSubTask=main.subtasks.map((sub)=>{
+                    if(sub.id===subTaskId){
+                    sub.completed=!sub.completed
+                    if(sub.completed===true){
+                      main.completedSubtaskCount+=1;
+                      if (main.completedSubtaskCount === main.subtaskCount) {
+                        main.completed = true;
+                      }
+                    }
+                    else{
+                      main.completedSubtaskCount-=1;
+                      main.completed=false;
+                    }
+                  }
+                  return sub
+                  })
+                  return {...main,subtasks:updatedSubTask}
+                }
+                return main;
+              });
+              return { ...section, mainTasks: updatedMainTask };
+            }
+            return section;
+          });
+          return { ...project, sections: updatedSection };
+        }
+        return project;
+      });
+      state.toDo = {
+        ...state.toDo,
+        projects: updatedProject,
+      };
+      console.log(state.toDo);
+    },
     setSubTasks: (state, action: PayloadAction<SubtaskData>) => {
-      console.log("Before:", state.toDo);
       console.log(
         state.selectProject,
         state.selectSection,
@@ -63,14 +140,11 @@ const toDoSlice = createSlice({
       const updatedProjects: ProjectData[] = state.toDo.projects.map(
         (project) => {
           if (project.name === state.selectProject) {
-            console.log("In Project");
             const updatedSections: SectionData[] = project.sections.map(
               (section) => {
                 if (section.id === state.selectSection) {
-                  console.log("In Section");
                   const updatedMainTasks: MainTaskData[] =
                     section.mainTasks.map((main) => {
-                      console.log("In main");
                       if (main.id === state.selectSubTaskMainId) {
                         const taskInfo = action.payload;
                         const subTask: SubtaskData = {
@@ -183,15 +257,12 @@ const toDoSlice = createSlice({
             const updatedSections: SectionData[] = project.sections.map(
               (section) => {
                 if (section.id === state.selectSection) {
-                  // Filter out the main task if its ID matches the taskId
                   const updatedMainTasks = section.mainTasks
                     .filter((main) => main.id !== taskId)
                     .map((main) => {
-                      // If the main task is not the one to be deleted, check its subtasks
                       const updatedSubtasks = main.subtasks.filter(
                         (sub) => sub.id !== taskId
                       );
-                      // Update subtask count if a subtask was removed
                       if (main.subtasks.length !== updatedSubtasks.length) {
                         main.subtaskCount -= 1;
                         section.totalSectionTasks -= 1;
@@ -266,5 +337,7 @@ export const {
   setSubTasks,
   deleteTasks,
   setSelectTaskId,
+  setCompletedMainTask,
+  setCompletedSubTask,
 } = toDoSlice.actions;
 export default toDoSlice.reducer;

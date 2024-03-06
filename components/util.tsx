@@ -7,6 +7,9 @@ export const useProjectName = () => {
   const todo = useTypedSelector(selectTodo);
   return todo.projects.map((project) => project.name);
 };
+export const useProject=()=>{
+  
+}
 
 export const useTotalTaskName = () => {
   const todo = useTypedSelector(selectTodo);

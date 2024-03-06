@@ -14,7 +14,6 @@ import Link from "next/link";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 const FormSchema = z.object({
   username: z.string().min(1, { message: "Username is required" }).max(100),

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Accordion,
   AccordionContent,
@@ -17,16 +17,9 @@ export interface SectionProps {
   }[];
 }
 import {
-  fetchAllData,
-  selectError,
-  selectLoading,
-  selectTodo,
-  selectSelectProject,
-  setSelectProject,
   setSelectSection,
 } from "@/app/store/slice";
-import { useProjectName, useTotalTaskName } from "@/components/util";
-import { store, useAppDispatch, useTypedSelector } from "@/app/store/store";
+import { useAppDispatch } from "@/app/store/store";
 const Section: React.FC<SectionProps> = ({ sections }) => {
   const dispatch=useAppDispatch();
   const handleSection=(sectionId:string)=>{

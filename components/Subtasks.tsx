@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Checkbox } from "./ui/checkbox";
-import { SubTaskType } from "@/app/api/subtask/route";
 import DialogBox from "./Deletedialogbox";
 import AddSubTask from "./AddSubTask";
 import { useSubTaskDetails } from "./util";
 import { SubtaskData } from "@/app/store/types";
-import { v4 as uuidv4 } from "uuid";
 import {
   selectTodo,
   setSelectSection,
   setSelectSubTaskMainId,
   setSelectTaskId,
+  setCompletedSubTask,
 } from "@/app/store/slice";
 import { useAppDispatch, useTypedSelector } from "@/app/store/store";
 
@@ -27,15 +26,7 @@ const SubTasks: React.FC<SubTasksProps> = ({ sectionId, mainTaskId }) => {
   const todo = useTypedSelector(selectTodo);
   const dispatch=useAppDispatch();
   const handleCheckboxChange = (subtaskId: string) => {
-    console.log("Handling checkbox");
-    console.log(noOfSubTasks);
-    setNoOfSubTasks((prevTasks) =>
-      prevTasks.map((subtask) =>
-        subtask.id=== subtaskId
-          ? { ...subtask, completed: !subtask.completed }
-          : subtask
-      )
-    );
+    dispatch(setCompletedSubTask({mainTaskId:mainTaskId,subTaskId:subtaskId}));
     const updatedTask = noOfSubTasks.find(
       (task) => task.id===subtaskId
     );

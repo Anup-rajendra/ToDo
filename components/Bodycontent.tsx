@@ -11,10 +11,11 @@ import {
   selectSelectProject,
   setSelectProject,
 } from "@/app/store/slice";
-import { store, useAppDispatch, useTypedSelector } from "@/app/store/store";
-import { useProjectName, useSectionName } from "./util";
+import { useTypedSelector } from "@/app/store/store";
+import {  useSectionName } from "./util";
 const BodyContent = () => {
   const selectProject= useTypedSelector(selectSelectProject);
+  useEffect(() => {}, [selectProject]);
   return (
     <div className="w-[100%]">
       <div className="flex flex-col min-h-screen pl-9 pt-9 gap-6">

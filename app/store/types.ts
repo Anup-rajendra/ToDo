@@ -1,5 +1,3 @@
-import { TasksData } from "../api/maintask/route";
-
 export interface State {
   toDo: UserData;
   loading: boolean;

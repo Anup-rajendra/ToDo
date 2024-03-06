@@ -1,22 +1,16 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-// import { addSubTaskDetails } from "../app/store/slice";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import {
   Form,
   FormField,
@@ -27,9 +21,10 @@ import {
 import { DialogClose } from "@radix-ui/react-dialog";
 import { RedCrossTwo } from "./ui/redcrosstwo";
 import { v4 as uuidv4 } from "uuid";
-import { setSelectSection, setMainTasks,setSelectSubTaskMainId, setSubTasks } from "@/app/store/slice";
+import {setSubTasks } from "@/app/store/slice";
 import { useAppDispatch } from "@/app/store/store";
-import { SectionData, SubtaskData } from "@/app/store/types";
+import { SubtaskData } from "@/app/store/types";
+import { useForm } from "react-hook-form";
 
 interface AddMaintaskProps {
   maintaskId: string;

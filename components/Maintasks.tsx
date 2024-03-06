@@ -5,16 +5,12 @@ import SubTasks from "./Subtasks";
 import { GitMerge } from "lucide-react";
 import DialogBox from "./Deletedialogbox";
 import {
-  selectError,
-  selectLoading,
   selectTodo,
-  selectSelectProject,
-  setSelectProject,
-  setSelectSection,
+  setCompletedMainTask,
 } from "@/app/store/slice";
-import { store, useAppDispatch, useTypedSelector } from "@/app/store/store";
-import { selectSelectTaskId,setSelectTaskId } from "@/app/store/slice";
-import { useMainTaskDetails, useProjectName, useSectionName } from "./util";
+import {  useAppDispatch, useTypedSelector } from "@/app/store/store";
+import { setSelectTaskId } from "@/app/store/slice";
+import { useMainTaskDetails} from "./util";
  
 
 interface MainTasksProp {
@@ -34,15 +30,8 @@ const MainTasks: React.FC<MainTasksProp> = ({ sectionId, sectionName }) => {
   
   
   const handleCheckboxChange = (taskId: string) => {
-      setMainTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.task_id ===  taskId
-            ? { ...task, is_completed: !task.is_completed }
-            : task
-        )
-     
-    );
-    
+    dispatch(setCompletedMainTask(taskId));
+    setMainTasks(mainTaskDetails);
         const updatedTask = mainTasks.find(
           (task) => task.task_id === taskId 
         );
