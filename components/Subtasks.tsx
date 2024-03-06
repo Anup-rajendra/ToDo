@@ -6,7 +6,12 @@ import AddSubTask from "./AddSubTask";
 import { useSubTaskDetails } from "./util";
 import { SubtaskData } from "@/app/store/types";
 import { v4 as uuidv4 } from "uuid";
-import { selectTodo, setSelectSection, setSelectSubTaskMainId } from "@/app/store/slice";
+import {
+  selectTodo,
+  setSelectSection,
+  setSelectSubTaskMainId,
+  setSelectTaskId,
+} from "@/app/store/slice";
 import { useAppDispatch, useTypedSelector } from "@/app/store/store";
 
 interface SubTasksProps {
@@ -76,10 +81,15 @@ const SubTasks: React.FC<SubTasksProps> = ({ sectionId, mainTaskId }) => {
   const handleMouseLeave = () => {
     setHoveredSubtaskId(null);
   };
-   const handleSectionMain= (sectionId: string,mainId:string) => {
+   const handleSectionSub= (sectionId: string,subtask_id:string) => {
      dispatch(setSelectSection(sectionId));
-     dispatch(setSelectSubTaskMainId(mainId));
+     dispatch(setSelectTaskId(subtask_id));
    };
+    const handleMainTask= (
+      mainId: string,
+    ) => {
+      dispatch(setSelectSubTaskMainId(mainId));
+    };
   useEffect(()=>{
     setNoOfSubTasks(subTaskDetails);
   },[todo])
@@ -89,7 +99,10 @@ const SubTasks: React.FC<SubTasksProps> = ({ sectionId, mainTaskId }) => {
       {noOfSubTasks && noOfSubTasks.length > 0 && (
         <>
           {noOfSubTasks.map((subtask, index) => (
-            <div key={index}>
+            <div
+              key={index}
+              onMouseOver={() => handleSectionSub(sectionId, subtask.id)}
+            >
               <div
                 className="flex flex-col gap-3.5 pl-6"
                 onMouseEnter={() => handleMouseEnter(String(subtask.id))}
@@ -120,7 +133,7 @@ const SubTasks: React.FC<SubTasksProps> = ({ sectionId, mainTaskId }) => {
           ))}
           <div
             className="pl-6 -mt-2"
-            onMouseOver={() => handleSectionMain(sectionId,mainId)}
+            onMouseOver={() => handleMainTask(mainId)}
           >
             <AddSubTask maintaskId={mainId} sectionId={sectionId} />
           </div>

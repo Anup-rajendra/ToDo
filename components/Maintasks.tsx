@@ -13,6 +13,7 @@ import {
   setSelectSection,
 } from "@/app/store/slice";
 import { store, useAppDispatch, useTypedSelector } from "@/app/store/store";
+import { selectSelectTaskId,setSelectTaskId } from "@/app/store/slice";
 import { useMainTaskDetails, useProjectName, useSectionName } from "./util";
  
 
@@ -22,6 +23,7 @@ interface MainTasksProp {
 }
 
 const MainTasks: React.FC<MainTasksProp> = ({ sectionId, sectionName }) => {
+  const dispatch=useAppDispatch();
   const [hoveredTaskId, setHoveredTaskId] = useState<string | null>(null);
    const mainTaskDetails = useMainTaskDetails(sectionName);
    const todo = useTypedSelector(selectTodo);
@@ -79,6 +81,10 @@ const MainTasks: React.FC<MainTasksProp> = ({ sectionId, sectionName }) => {
   };
 
 
+  function handleMainTaskId(task_id:string): void {
+     dispatch(setSelectTaskId(task_id))
+  }
+
   return (
     <div>
       {Array.isArray(mainTasks) &&
@@ -89,7 +95,10 @@ const MainTasks: React.FC<MainTasksProp> = ({ sectionId, sectionName }) => {
             onMouseEnter={() => setHoveredTaskId(String(task.task_id))}
             onMouseLeave={() => setHoveredTaskId(null)}
           >
-            <div className="flex items-center flex-row border-b pb-3">
+            <div
+              className="flex items-center flex-row border-b pb-3"
+              onMouseOver={() => handleMainTaskId(task.task_id)}
+            >
               <div className="w-full flex justify-between">
                 <div className="flex">
                   <Checkbox

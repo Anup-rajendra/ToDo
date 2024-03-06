@@ -48,11 +48,11 @@ const Section: React.FC<SectionProps> = ({ sections }) => {
                   </div>
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="pl-3">
-                <div
-                  className="pt-2"
-                  onMouseOver={() => handleSection(section.section_id)}
-                >
+              <AccordionContent
+                className="pl-3"
+                onMouseOver={() => handleSection(section.section_id)}
+              >
+                <div className="pt-2">
                   <AddTask sectionId={section.section_id} display={true} />
                 </div>
                 <MainTasks

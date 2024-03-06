@@ -7,6 +7,7 @@ export interface State {
   selectProject: string;
   selectSection: string;
   selectSubTaskMainId: string;
+  selectTaskId:string;
 }
  export interface UserData {
   id: string;

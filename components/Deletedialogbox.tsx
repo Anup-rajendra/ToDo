@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DeleteIcon } from "./ui/deleteicon";
 import { Button } from "./ui/button";
 import {
@@ -11,11 +11,20 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
+import {
+  selectTodo,
+  setSelectSection,
+  setSelectSubTaskMainId,
+  deleteTasks,
+} from "@/app/store/slice";
+import { useAppDispatch, useTypedSelector } from "@/app/store/store";
 interface DeleteDialogBoxProps {
   taskId: string;
 }
 const DeleteDialogBox: React.FC<DeleteDialogBoxProps> = ({ taskId }) => {
+  const dispatch=useAppDispatch();
   const handleSubmit = async () => {
+    dispatch(deleteTasks(taskId));
     try {
       const response = await fetch("/api/tasks/deletemaintask", {
         method: "POST",
