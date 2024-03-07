@@ -25,10 +25,8 @@ export const useUserDetails = () => {
   }
 };
 
-export const useSectionName = () => {
+export const useSectionName = (projectName:string) => {
   const todo = useTypedSelector(selectTodo);
-  const projectName=useTypedSelector(selectSelectProject)
-
   if (!projectName) {
    
     return [];

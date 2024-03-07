@@ -20,7 +20,7 @@ const BodyContent = () => {
     <div className="w-[100%]">
       <div className="flex flex-col min-h-screen pl-9 pt-9 gap-6">
         <p className="font-bold text-2xl pl-7">{selectProject}</p>
-        <Section sections={useSectionName()} />
+        <Section sections={useSectionName(selectProject)} />
       </div>
     </div>
   );

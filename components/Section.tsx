@@ -1,5 +1,4 @@
-"use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -9,6 +8,9 @@ import {
 import AddTask from "./Addtask";
 import { Ellipsis } from "./Ellipsis";
 import MainTasks from "./Maintasks";
+import { selectSelectProject, setSelectSection } from "@/app/store/slice";
+import { useAppDispatch, useTypedSelector } from "@/app/store/store";
+
 export interface SectionProps {
   sections: {
     section_id: string;
@@ -16,22 +18,32 @@ export interface SectionProps {
     total_section_tasks: number;
   }[];
 }
-import {
-  setSelectSection,
-} from "@/app/store/slice";
-import { useAppDispatch } from "@/app/store/store";
+
 const Section: React.FC<SectionProps> = ({ sections }) => {
-  const dispatch=useAppDispatch();
-  const handleSection=(sectionId:string)=>{
+  const dispatch = useAppDispatch();
+  const projectName = useTypedSelector(selectSelectProject);
+  const [renderKey, setRenderKey] = useState<number>(0);
+
+  useEffect(() => {
+    setRenderKey((oldKey) => oldKey + 1);
+  }, [projectName]);
+
+  const handleSection = (sectionId: string) => {
     dispatch(setSelectSection(sectionId));
-  }
+  };
+
   return (
     <div className="flex flex-col">
-      {sections.map((section, index) => (
-        <div key={index} className="flex flex-row mb-10">
+      {sections.map((section) => (
+        <div
+          key={`${section.section_id}-${renderKey}`}
+          className="flex flex-row mb-10"
+        >
           <Accordion type="single" collapsible className="w-[50%]">
             <AccordionItem value="item-1" showBorder={false}>
-              <AccordionTrigger>
+              <AccordionTrigger
+                onClick={() => handleSection(section.section_id)}
+              >
                 <div className="flex justify-between border-b pb-1 w-[100%] text-left">
                   <div>
                     {section.section_name}

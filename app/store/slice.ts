@@ -156,6 +156,7 @@ const toDoSlice = createSlice({
                         main.subtaskCount += 1;
                         section.totalSectionTasks += 1;
                         project.totalTasks += 1;
+                        
                       }
                       return main;
                     });
@@ -265,6 +266,7 @@ const toDoSlice = createSlice({
                       );
                       if (main.subtasks.length !== updatedSubtasks.length) {
                         main.subtaskCount -= 1;
+                        main.completedSubtaskCount-=1;
                         section.totalSectionTasks -= 1;
                         project.totalTasks -= 1;
                       }
