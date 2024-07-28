@@ -9,18 +9,20 @@ import {
 import { RootState } from "./store";
 import { AddTaskDetails } from "./types";
 export const initialState: State = {
-  toDo: { id: "", // or any default value
+  toDo: {
+    id: "", // or any default value
     username: "",
     firstname: "",
     lastname: "",
     email: "",
-    projects: []},
+    projects: [],
+  },
   loading: false,
   error: null,
-  selectProject:"",
-  selectSection:"",
-  selectSubTaskMainId:"",
-  selectTaskId:"",
+  selectProject: "",
+  selectSection: "",
+  selectSubTaskMainId: "",
+  selectTaskId: "",
 };
 
 export const fetchAllData = createAsyncThunk("users/fetch", async () => {
@@ -89,7 +91,10 @@ const toDoSlice = createSlice({
       };
       console.log(state.toDo);
     },
-    setCompletedSubTask: (state, action: PayloadAction<{mainTaskId:string,subTaskId:string}>) => {
+    setCompletedSubTask: (
+      state,
+      action: PayloadAction<{ mainTaskId: string; subTaskId: string }>
+    ) => {
       const { mainTaskId, subTaskId } = action.payload;
       const updatedProject = state.toDo.projects.map((project) => {
         if (project.name === state.selectProject) {
@@ -97,23 +102,22 @@ const toDoSlice = createSlice({
             if (section.id === state.selectSection) {
               const updatedMainTask = section.mainTasks.map((main) => {
                 if (main.id === mainTaskId) {
-                  const updatedSubTask=main.subtasks.map((sub)=>{
-                    if(sub.id===subTaskId){
-                    sub.completed=!sub.completed
-                    if(sub.completed===true){
-                      main.completedSubtaskCount+=1;
-                      if (main.completedSubtaskCount === main.subtaskCount) {
-                        main.completed = true;
+                  const updatedSubTask = main.subtasks.map((sub) => {
+                    if (sub.id === subTaskId) {
+                      sub.completed = !sub.completed;
+                      if (sub.completed === true) {
+                        main.completedSubtaskCount += 1;
+                        if (main.completedSubtaskCount === main.subtaskCount) {
+                          main.completed = true;
+                        }
+                      } else {
+                        main.completedSubtaskCount -= 1;
+                        main.completed = false;
                       }
                     }
-                    else{
-                      main.completedSubtaskCount-=1;
-                      main.completed=false;
-                    }
-                  }
-                  return sub
-                  })
-                  return {...main,subtasks:updatedSubTask}
+                    return sub;
+                  });
+                  return { ...main, subtasks: updatedSubTask };
                 }
                 return main;
               });
@@ -156,7 +160,6 @@ const toDoSlice = createSlice({
                         main.subtaskCount += 1;
                         section.totalSectionTasks += 1;
                         project.totalTasks += 1;
-                        
                       }
                       return main;
                     });
@@ -266,7 +269,11 @@ const toDoSlice = createSlice({
                       );
                       if (main.subtasks.length !== updatedSubtasks.length) {
                         main.subtaskCount -= 1;
-                        main.completedSubtaskCount-=1;
+                        if (main.completedSubtaskCount == 0) {
+                          main.completedSubtaskCount = 0;
+                        } else {
+                          main.completedSubtaskCount -= 1;
+                        }
                         section.totalSectionTasks -= 1;
                         project.totalTasks -= 1;
                       }
@@ -320,17 +327,14 @@ const toDoSlice = createSlice({
   },
 });
 
- 
-
 export const selectTodo = (state: RootState) => state.toDo;
 export const selectLoading = (state: RootState) => state.loading;
 export const selectError = (state: RootState) => state.error;
 export const selectSelectProject = (state: RootState) => state.selectProject;
-export const selectSelectSection= (state: RootState) => state.selectSection;
+export const selectSelectSection = (state: RootState) => state.selectSection;
 export const selectSelectSubTaskMainId = (state: RootState) =>
   state.selectSubTaskMainId;
-export const selectSelectTaskId = (state: RootState) =>
-  state.selectTaskId;
+export const selectSelectTaskId = (state: RootState) => state.selectTaskId;
 export const {
   setSelectProject,
   setSelectSection,
